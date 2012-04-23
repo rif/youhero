@@ -1,0 +1,27 @@
+{% extends "templates/base.html" %}
+{% block content %}       
+{% autoescape true %}
+<span class="listing_title">{{ title }}</span><br /><br />
+	{% for entry in feed.entry %}
+	<div class="row">
+		<div class="span3">
+			<a class="yt" title="{{ ('%s' % entry.title.text).decode('utf-8') }}" href="{{ entry.media.player.url }}"><img class="thumb" src="{{ entry.media.thumbnail[0].url }}" alt="{{ ('%s' % entry.title.text).decode('utf-8') }}"/></a><br /><br />
+  			<span class="video_rating">Rating: {{ entry.rating.average }} of 5 stars<br/>{{ entry.rating.num_raters }} Votes </span>
+		</div>
+		<div class="span9">
+      		<span class="video_title">{{ ('%s' % entry.title.text).decode('utf-8') }}</span><br />
+      		<span class="video_description">{{ ('%s' % entry.media.description.text).decode('utf-8') }}</span><br /><br />
+			<span class="video_category"><strong>{{ ('%s' % entry.media.category[0].text).decode('utf-8') }}</strong></span>
+  			<span class="video_published"> | published on {{ (entry.published.text.split('T')[0] + ' at ' +
+      entry.published.text.split('T')[1][:5] + ' PST').decode('utf-8') }}</span><br />
+  			<span class="video_keywords"><strong>Keywords:</strong> {{ ('%s' % entry.media.keywords.text).decode('utf-8') }} </span><br />
+  		</div>	
+    <div class="row"><div class="span4"><hr class="slight"/></div></div>
+    </div>    
+	{% endfor %}
+{% endautoescape %}
+{% endblock %}
+
+{% block extrascripts %}
+<script type="text/javascript">var YWPParams = {autoplay: {{ autoplay }}};</script>
+{% endblock %}

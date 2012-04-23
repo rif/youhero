@@ -1,0 +1,10 @@
+{% extends "templates/base.html" %}
+{% block herocontent %}
+<h2>Send a message to the author</h2> 
+<form action="/contact" method="post">
+	<div><label for="from">Your Name</label><input type="text" name="from" /></div>
+	<div><label for="email">Email</label><input type="email" type="text" name="email" /></div>
+	<div><label for="content">Message</label><textarea name="content" rows="3" cols="60"></textarea></div>
+	<div><input class="btn btn-primary" type="submit" value="Send Message!"></div>
+</form>
+{% endblock %}
