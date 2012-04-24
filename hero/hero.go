@@ -4,11 +4,11 @@ import (
 	"appengine"
 	"appengine/memcache"
 	"appengine/urlfetch"
-	"fmt"
+	//"fmt"
 	"gdata"
 	"html/template"
 	"net/http"
-	"bytes"
+	//"bytes"
 	"time"
 )
 
@@ -19,24 +19,24 @@ const (
 
 func mainPage(w http.ResponseWriter, r *http.Request) {	
 	c := appengine.NewContext(r)
-	front_page, err := memcache.Get(c, "front_page")
-	if err != nil {		
+	//front_page, err := memcache.Get(c, "front_page")
+	if true {		
 		yentries := gdata.ParseFeed(RECENTLY_FEATURED_FEED, urlfetch.Client(c))
 		templateValues := map[string]interface{}{"entries": yentries,
 			"title": "Recently Featured Videos",
 			"autoplay": "false",
-		}
-		var buf *bytes.Buffer
+		}		
+		//buf := &bytes.Buffer{}
 		t, _ := template.ParseFiles("templates/base.html", "templates/index.html")
-		t.Execute(buf, templateValues)
+		t.Execute(w, templateValues)
 		oneHour,_ := time.ParseDuration("1h") 
 		item := &memcache.Item{Key: "front_page",
-			Value: buf.Bytes(),
+			Value: []byte("mama"),
 			Expiration: oneHour,
 			}
 		memcache.Set(c, item)
 	}
-	fmt.Fprint(w, front_page.Value)
+	//fmt.Fprint(w, front_page.Value)
 }
 
 func searchPage(w http.ResponseWriter, r *http.Request) {
