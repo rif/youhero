@@ -1,3 +1,4 @@
 syntax: glob
 *~
 .sass-cache
+*.sublime*

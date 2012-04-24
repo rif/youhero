@@ -1,5 +1,5 @@
-{% extends "templates/base.html" %}
-{% block content %}
+{{define "title"}}About YouHero{{end}}
+{{define "content"}}
 <h2>How it works</h2>
 <p>This web applications spares you of the trouble of creating <a href="http://youtube.com">YouTube</a> playlists.</p>
 <p>In the mood of listening some Elvis songs? Just search <a href="/search?v=elvis">elvis</a> and enjoy!</p>
@@ -13,4 +13,6 @@
 	<li><a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a></li>
 	<li><a href="http://compass-style.org/">Compass</a></li>	
 </ul>
-{% endblock %}
+{{end}}
+
+{{define "extrascripts"}}{{end}}
