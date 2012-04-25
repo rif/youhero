@@ -72,20 +72,22 @@ func ParseEntry(entry string) (ye YEntry, err error) {
 	return
 }
 
-func ParseFeed(feed string, client *http.Client) (yentries []YEntry) {
+func ParseFeed(feed string, client *http.Client) (yentries []YEntry, err error) {
 	var resp *http.Response
 	if client != nil {
-		resp, _ = client.Get(feed)
+		resp, err = client.Get(feed)
 	} else {
-		resp, _ = http.Get(feed)
+		resp, err = http.Get(feed)
 	}
-	defer resp.Body.Close()
-	body, _ := ioutil.ReadAll(resp.Body)
-	entryRe := regexp.MustCompile(`(?s)<entry>.*?</entry>`)
-	entries := entryRe.FindAllString(string(body), 50)
-	for _, e := range entries {
-		if ye, err := ParseEntry(e); err == nil {
-			yentries = append(yentries, ye)
+	if err == nil {
+		defer resp.Body.Close()
+		body, _ := ioutil.ReadAll(resp.Body)
+		entryRe := regexp.MustCompile(`(?s)<entry>.*?</entry>`)
+		entries := entryRe.FindAllString(string(body), 50)
+		for _, e := range entries {
+			if ye, err := ParseEntry(e); err == nil {
+				yentries = append(yentries, ye)
+			}
 		}
 	}
 	return

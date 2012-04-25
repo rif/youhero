@@ -13,6 +13,9 @@ handlers:
 - url: /favicon\.ico
   static_files: img/favicon.ico
   upload: img/favicon\.ico
+- url: /robots\.txt
+  static_files: templates/robots.txt
+  upload: templates/robots\.txt
 - url: /google841527a192bbf726\.html
   static_files: templates/google841527a192bbf726.html
   upload: templates/google841527a192bbf726\.html

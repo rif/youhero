@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">               	
-   	<title>{{template "title"}}</title>
+   	<title>{{$.title}}</title>
    	<link rel="icon" href="/img/favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Youtube instant search playlist">
@@ -100,8 +100,8 @@
 		        	</div>
 		     </div>		        
 		    {% endblock %}  
-      </div>
-      {{template "content"}}
+      </div>            
+      {{template "content" .}}                
       <hr>
       <footer>
         <p>&copy; <a href="http://fericean.ro">Radu Fericean</a> 2012</p>
@@ -117,7 +117,7 @@
 		})
 	</script>
 	<script type="text/javascript" src="http://webplayer.yahooapis.com/player.js"></script>
-	{{template "extrascripts"}}
+	{{template "extrascripts" .}}
 	<script type="text/javascript">
 	$(function() {
 		$("#master-search").focus();
