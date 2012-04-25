@@ -1,5 +1,5 @@
 {{define "content"}}
-<span class="listing_title">{{ $.title }}</span><br /><br />
+<span class="listing_title">{{ $.header }}</span><br /><br />
 	{{range $.entries}}
 	<div class="row">
 		<div class="span3">
@@ -10,7 +10,7 @@
       		<span class="video_title">{{ .Title }}</span><br />
       		<span class="video_description">{{ .Description }}</span><br /><br />
 			<span class="video_category"><strong>{{ .Category }}</strong></span>
-  			<span class="video_published"> | published on {{ .Published }}</span><br />
+  			<span class="video_published"> | published on {{ .GetPublishedTime }}</span><br />
   			<span class="video_keywords"><strong>Keywords:</strong> {{ .Keywords }} </span><br />
   		</div>	
     <div class="row"><div class="span4"><hr class="slight"/></div></div>
