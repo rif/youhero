@@ -2,6 +2,7 @@ package hello
 
 import (
 	"appengine"
+	"appengine/mail"
 	"appengine/memcache"
 	"appengine/urlfetch"
 	"bytes"
@@ -23,7 +24,7 @@ func mainPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		yentries, err := gdata.ParseFeed(RECENTLY_FEATURED_FEED, urlfetch.Client(c))
 		if err != nil {
-			c.Infof("error getting entries: %v", err)
+			c.Errorf("error getting entries: %v", err)
 		}
 		templateValues := map[string]interface{}{"entries": yentries,
 			"title":    "Recently Featured Videos",
@@ -39,7 +40,7 @@ func mainPage(w http.ResponseWriter, r *http.Request) {
 			Expiration: oneHour,
 		}
 		if err := memcache.Set(c, front_page); err != nil {
-			c.Infof("error setting item: %v - %v", err)
+			c.Errorf("error setting item: %v - %v", err)
 		}
 	}
 	fmt.Fprint(w, string(front_page.Value))
@@ -54,7 +55,7 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 	}
 	yentries, err := gdata.ParseFeed(fmt.Sprintf(SEARCH_FEED, searchTerm), urlfetch.Client(c))
 	if err != nil {
-		c.Infof("error getting entries: %v", err)
+		c.Errorf("error getting entries: %v", err)
 	}
 	templateValues := map[string]interface{}{"entries": yentries,
 		"title":    "Recently Featured Videos",
@@ -65,18 +66,25 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func contactPage(w http.ResponseWriter, r *http.Request) {
-	/*def get(self):
-	      template = jinja_environment.get_template('templates/contact.html')
-	      self.response.out.write(template.render({}))        
-	  def post(self):
-	      name = cgi.escape(self.request.get('from')).encode('UTF-8')
-	      email = cgi.escape(self.request.get('email')).encode('UTF-8')
-	      message = mail.EmailMessage(sender="Radu Fericean (YouHero) <fericean@gmail.com>",
-	                          subject="YouHero message from %s (%s)" % (name, email))
-	      message.to = "Radu Fericean <radu@fericean.ro>"
-	      message.body = cgi.escape(self.request.get('content'))
-	      message.send()
-	      self.redirect('/')*/
+	c := appengine.NewContext(r)
+	if r.Method == "POST" {
+		name := r.FormValue("from")
+		email := r.FormValue("email")
+		content := r.FormValue("content")
+		msg := &mail.Message{
+			Sender:  "Radu Fericean (YouHero) <fericean@gmail.com>",
+			To:      []string{"Radu Fericean <radu@fericean.ro>"},
+			Subject: fmt.Sprintf("YouHero message from %s (%s)", name, email),
+			Body:    content,
+		}
+		if err := mail.Send(c, msg); err != nil {
+			c.Errorf("Couldn't send email: %v", err)
+		}
+		http.Redirect(w, r, "/", http.StatusOK)
+		return
+	}
+	t, _ := template.ParseFiles("templates/base.html", "templates/contact.html")
+	t.Execute(w, nil)
 }
 
 func aboutPage(w http.ResponseWriter, r *http.Request) {
@@ -85,10 +93,13 @@ func aboutPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func itemsPerPageQuery(w http.ResponseWriter, r *http.Request) {
-	/*def get(self):
-	  expiration = datetime.datetime.utcnow() + datetime.timedelta(days=30)
-	  self.response.headers.add_header('Set-Cookie','items_per_page=%s; expires=%s; path=/search;' %
-	      (str(self.request.get("nb", '25')), expiration.strftime("%a, %d-%b-%Y %H:%M:%S UTC")))*/
+	thirtyDays, _ := time.ParseDuration("720h")
+	expiration := time.Now().Add(thirtyDays)
+	nb := r.FormValue("nb")
+	if nb == "" {
+		nb = "25"
+	}
+	w.Header().Add("Set-Cookie", fmt.Sprintf("items_per_page=%s; expires=%s; path=/search;", nb, expiration.Format(time.RFC1123)))
 }
 
 func init() {
