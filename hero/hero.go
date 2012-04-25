@@ -10,12 +10,15 @@ import (
 	"gdata"
 	"html/template"
 	"net/http"
+	"net/url"
+	"pat"
 	"time"
 )
 
 const (
 	RECENTLY_FEATURED_FEED = "https://gdata.youtube.com/feeds/api/standardfeeds/recently_featured"
-	SEARCH_FEED            = "https://gdata.youtube.com/feeds/api/videos?q=%s"
+	SEARCH_FEED            = "https://gdata.youtube.com/feeds/api/videos?q=%s&max-results=%s"
+	COOKIE_NAME            = "items_per_page"
 )
 
 func mainPage(w http.ResponseWriter, r *http.Request) {
@@ -49,12 +52,18 @@ func mainPage(w http.ResponseWriter, r *http.Request) {
 
 func searchPage(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
-	searchTerm := r.FormValue("v")
+	searchTerm := r.URL.Query().Get(":query")
+	c.Infof("xxxxxxxxxxxxxxxxxxxxxxxxxxxx %s", searchTerm)
 	if searchTerm == "" {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-	yentries, err := gdata.ParseFeed(fmt.Sprintf(SEARCH_FEED, searchTerm), urlfetch.Client(c))
+	ippCookie, err := r.Cookie(COOKIE_NAME)
+	ipp := "25"
+	if err == nil {
+		ipp = ippCookie.Value
+	}
+	yentries, err := gdata.ParseFeed(fmt.Sprintf(SEARCH_FEED, url.QueryEscape(searchTerm), ipp), urlfetch.Client(c))
 	if err != nil {
 		c.Errorf("error getting entries: %v", err)
 	}
@@ -97,17 +106,25 @@ func aboutPage(w http.ResponseWriter, r *http.Request) {
 func itemsPerPageQuery(w http.ResponseWriter, r *http.Request) {
 	thirtyDays, _ := time.ParseDuration("720h")
 	expiration := time.Now().Add(thirtyDays)
-	nb := r.FormValue("nb")
-	if nb == "" {
-		nb = "25"
+	if nb := r.FormValue("nb"); nb != "" {
+		http.SetCookie(w, &http.Cookie{Name: COOKIE_NAME, Value: nb, Path: "/search", Expires: expiration})
 	}
-	w.Header().Add("Set-Cookie", fmt.Sprintf("items_per_page=%s; expires=%s; path=/search;", nb, expiration.Format(time.RFC1123)))
+
 }
 
 func init() {
-	http.HandleFunc("/", mainPage)
-	http.HandleFunc("/search", searchPage)
-	http.HandleFunc("/about", aboutPage)
-	http.HandleFunc("/contact", contactPage)
-	http.HandleFunc("/items", itemsPerPageQuery)
+	m := pat.New()
+	m.Get("/search/:query", http.HandlerFunc(searchPage))
+	m.Get("/about", http.HandlerFunc(aboutPage))
+	m.Get("/contact", http.HandlerFunc(contactPage))
+	m.Get("/items", http.HandlerFunc(itemsPerPageQuery))
+	m.Get("/", http.HandlerFunc(mainPage))
+	http.Handle("/", m)
+
+	//http.HandleFunc("/", mainPage)
+	//http.HandleFunc("/search", searchPage)
+	//http.HandleFunc("/about", aboutPage)
+	//http.HandleFunc("/contact", contactPage)
+	//http.HandleFunc("/items", itemsPerPageQuery)
+
 }

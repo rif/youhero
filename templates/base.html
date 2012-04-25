@@ -15,7 +15,7 @@
   <meta name="keywords" content=
   "youtube, playlist, search, instant, onthefly, music, video, sharing, free, upload">
   <meta name="author" content="Radu Fericean">
-  <link href="css/bootstrap.min.css" rel="stylesheet" type=
+  <link href="/css/bootstrap.min.css" rel="stylesheet" type=
   "text/css">
   <style type="text/css">
     body {
@@ -23,7 +23,7 @@
         padding-bottom: 40px;
       }
   </style>
-  <link href="css/bootstrap-responsive.min.css" rel="stylesheet"
+  <link href="/css/bootstrap-responsive.min.css" rel="stylesheet"
   type="text/css">
   <link href="/css/screen.css" media="screen, projection" rel=
   "stylesheet" type="text/css">
@@ -86,7 +86,7 @@
                   stream!</p>
 
                   <div class="input-append">
-                    <input name="v" placeholder="Search" id="master-search" size="100" type="text"><button onclick="$('form.form-horizontal').submit()" class="btn" type="button"><i class="icon-search"></i></button>
+                    <input name="q" placeholder="Search" id="master-search" size="100" type="text"><button onclick="$('form.form-horizontal').submit()" class="btn" type="button"><i class="icon-search"></i></button>
                   </div>
                 </div>
               </div>
@@ -140,7 +140,7 @@
     </footer>
   </div><!-- /container --><script type="text/javascript" src=
   "https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js">
-</script><script type="text/javascript" src="js/bootstrap.min.js">
+</script><script type="text/javascript" src="/js/bootstrap.min.js">
 </script><script type="text/javascript">
               $("a.yt").each(function(){
                     var url = $(this).attr("href");
@@ -153,6 +153,11 @@
 "text/javascript">
       $(function() {
                 $("#master-search").focus();
+                $("#master-form").submit(function(){
+                  var query = $(this).serialize();
+                  window.location = "/search/" + query.substring(2);
+                  return false;
+                });
                 $("a.items-link").click(function(){
                         $.get($(this).attr("href"));
                         $("a.items-link").removeClass("active")
