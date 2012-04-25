@@ -29,7 +29,7 @@ func mainPage(w http.ResponseWriter, r *http.Request) {
 		templateValues := map[string]interface{}{"entries": yentries,
 			"title":    "YouHero",
 			"header":   "Recently Featured Videos",
-			"autoplay": "false",
+			"autoplay": false,
 		}
 		buf := &bytes.Buffer{}
 		t, _ := template.ParseFiles("templates/base.html", "templates/index.html")
@@ -61,7 +61,7 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 	templateValues := map[string]interface{}{"entries": yentries,
 		"title":    searchTerm,
 		"header":   fmt.Sprintf("Searching for '%s'", searchTerm),
-		"autoplay": "true",
+		"autoplay": true,
 	}
 	t, _ := template.ParseFiles("templates/base.html", "templates/index.html")
 	t.Execute(w, templateValues)
