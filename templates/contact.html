@@ -9,4 +9,10 @@
 </form>
 {{end}}
 
-{{define "extrascripts"}}{{end}}
+{{define "extrascripts"}}
+<script type="text/javascript">
+$(function(){	
+	$("ul.nav>li:eq(2)").addClass("active")
+});
+</script>
+{{end}}
