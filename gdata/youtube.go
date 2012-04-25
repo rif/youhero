@@ -20,7 +20,11 @@ type YEntry struct {
 	Rating      string
 }
 
-func ParseEntry(entry string) (ye YEntry, err error) {
+func (ye *YEntry) GetPublishedTime() string {
+	return ye.Published.Format(time.RFC1123)
+}
+
+func ParseEntry(entry string) (ye *YEntry, err error) {
 	urlRe := regexp.MustCompile(`<media:player url='(.*?)&amp;feature=youtube_gdata_player'/>`)
 	thumbRe := regexp.MustCompile(`<media:thumbnail url='(.*?)'`)
 	titleRe := regexp.MustCompile(`<media:title type='plain'>(.*?)</media:title>`)
@@ -29,6 +33,7 @@ func ParseEntry(entry string) (ye YEntry, err error) {
 	keywordsRe := regexp.MustCompile(`<media:keywords>(.*?)</media:keywords>`)
 	publishedRe := regexp.MustCompile(`<published>(.*?)</published>`)
 	ratingRe := regexp.MustCompile(`<gd:rating average='(.*?)' .*? numRaters='(.*?)'`)
+	ye = &YEntry{}
 	if url := urlRe.FindStringSubmatch(entry); len(url) == 2 {
 		ye.Url = url[1]
 	} else {
@@ -65,14 +70,14 @@ func ParseEntry(entry string) (ye YEntry, err error) {
 		err = errors.New("Malformed entry")
 	}
 	if rating := ratingRe.FindStringSubmatch(entry); len(rating) == 3 {
-		ye.Rating = fmt.Sprintf("Rating: %s of 5 stars<br/>%s Votes", rating[1], rating[2])
+		ye.Rating = fmt.Sprintf("Rating: %s of 5 stars - %s Votes", rating[1], rating[2])
 	} else {
 		err = errors.New("Malformed entry")
 	}
 	return
 }
 
-func ParseFeed(feed string, client *http.Client) (yentries []YEntry, err error) {
+func ParseFeed(feed string, client *http.Client) (yentries []*YEntry, err error) {
 	var resp *http.Response
 	if client != nil {
 		resp, err = client.Get(feed)

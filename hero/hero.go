@@ -27,7 +27,8 @@ func mainPage(w http.ResponseWriter, r *http.Request) {
 			c.Errorf("error getting entries: %v", err)
 		}
 		templateValues := map[string]interface{}{"entries": yentries,
-			"title":    "Recently Featured Videos",
+			"title":    "YouHero",
+			"header":   "Recently Featured Videos",
 			"autoplay": "false",
 		}
 		buf := &bytes.Buffer{}
@@ -58,8 +59,9 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 		c.Errorf("error getting entries: %v", err)
 	}
 	templateValues := map[string]interface{}{"entries": yentries,
-		"title":    "Recently Featured Videos",
-		"autoplay": "false",
+		"title":    searchTerm,
+		"header":   fmt.Sprintf("Searching for '%s'", searchTerm),
+		"autoplay": "true",
 	}
 	t, _ := template.ParseFiles("templates/base.html", "templates/index.html")
 	t.Execute(w, templateValues)

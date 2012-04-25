@@ -1,144 +1,166 @@
 <!DOCTYPE html>
+
 <html lang="en">
-  <head>
-    <meta charset="utf-8">               	
-   	<title>{{$.title}}</title>
-   	<link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Youtube instant search playlist">
-    <meta name="keywords" content="youtube, playlist, search, instant, onthefly, music, video, sharing, free, upload">
-    <meta name="author" content="Radu Fericean">       
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <style type="text/css">
-      body {
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
+  <meta charset="utf-8">
+
+  <title>{{$.title}}</title>
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+  <meta name="viewport" content=
+  "width=device-width, initial-scale=1.0">
+  <meta name="description" content=
+  "Youtube instant search playlist">
+  <meta name="keywords" content=
+  "youtube, playlist, search, instant, onthefly, music, video, sharing, free, upload">
+  <meta name="author" content="Radu Fericean">
+  <link href="css/bootstrap.min.css" rel="stylesheet" type=
+  "text/css">
+  <style type="text/css">
+    body {
         padding-top: 60px;
         padding-bottom: 40px;
       }
-    </style>
-    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
-  	<link href="/css/print.css" media="print" rel="stylesheet" type="text/css" />
-  	<!--[if IE]>
+  </style>
+  <link href="css/bootstrap-responsive.min.css" rel="stylesheet"
+  type="text/css">
+  <link href="/css/screen.css" media="screen, projection" rel=
+  "stylesheet" type="text/css">
+  <link href="/css/print.css" media="print" rel="stylesheet" type=
+  "text/css"><!--[if IE]>
       <link href="/css/ie.css" media="screen, projection" rel="stylesheet" type="text/css" />
-  	<![endif]-->        
-    <!--[if lt IE 9]>
+        <![endif]--><!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-  </head>
+</head>
 
-  <body>
-	<div id="fb-root"></div>
-	<script>(function(d, s, id) {
-	  var js, fjs = d.getElementsByTagName(s)[0];
-	  if (d.getElementById(id)) return;
-	  js = d.createElement(s); js.id = id;
-	  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=208648199247847";
-	  fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));</script>
-	<!-- google plus -->
-	<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+<body>
+  <div id="fb-root"></div><script type="text/javascript">
+(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=208648199247847";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+  </script>
+  <!-- google plus -->
+  <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+			<span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="/">YouHero</a>
-          <div class="nav-collapse">
-            <ul class="nav">
-              <li class="active"><a href="/">Home</a></li>
-              <li><a href="/about">About</a></li>
-              <li><a href="/contact">Contact</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
+		</a>
+		<a class="brand" href="/">YouHero</a>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="active"><a href="/">Home</a></li>
+
+            <li><a href="/about">About</a></li>
+
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
       </div>
     </div>
+  </div>
 
-    <div class="container">      
-      <div class="hero-unit">      		
-      		<a href="/"><img src="/img/youhero.png" alt="youhero" /></a>      
-			<div class="row">	
-      		<div class="span5">		
-		    <form action="/search" method="get" id="master-form" class="form-horizontal">
-		    <fieldset>		    	
-		    	<div class="control-group">            		
-            		<div class="controls">
-            			<p>No more playlists, just search and enjoy the stream!</p>
-		          		<div class="input-append">
-		            		<input name="v" placeholder="Search" id="master-search" size="100" type="text"><button onclick="$('form.form-horizontal').submit()" class="btn" type="button"><i class="icon-search"></i></button>
-		          		</div>
-            		</div>
-          		</div>
-          	</fieldset>		    	
-		    </form>
-			</div>
-		    	<div class="span3 offset3">
-				<h4>
-		    	Items per page:
-		    	<a class="items-link" href="/items?nb=10">10</a>
-		    	<a class="items-link" href="/items?nb=25">25</a>
-		    	<a class="items-link" href="/items?nb=50">50</a>
-		    	</h4>
-		         	<div class="fb-like" data-href="http://www.youhe.ro" data-send="true" data-layout="button_count" data-width="450" data-show-faces="true"></div>		         	
-						<!-- Lockerz Share BEGIN -->
-						<div class="a2a_kit a2a_default_style">
-							<a class="a2a_dd" href="http://www.addtoany.com/share_save">Share</a>
-							<span class="a2a_divider"></span>							
-							<a class="a2a_button_facebook"></a>
-							<a class="a2a_button_twitter"></a>
-							<a class="a2a_button_email"></a>
-						</div>
-						<script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
-						<!-- Lockerz Share END -->
-		        	</div>
-		        </div>
+  <div class="container">
+    <div class="hero-unit">
+      <a href="/"><img src="/img/youhero.png" alt="youhero"></a>
 
-      </div>      
-	  <div id="google-adds">
-	<script type="text/javascript"><!--
-	google_ad_client = "ca-pub-7062661054055660";
-	/* FirstTry */
-	google_ad_slot = "2533169220";
-	google_ad_width = 728;
-	google_ad_height = 90;
-	//-->
-	</script>
-	<script type="text/javascript"
-	src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-	</script>
-	</div>      
-      {{template "content" .}}                
-      <hr>
-      <footer>
+      <div class="row">
+        <div class="span5">
+          <form action="/search" method="get" id="master-form"
+          class="form-horizontal">
+            <fieldset>
+              <div class="control-group">
+                <div class="controls">
+                  <p>No more playlists, just search and enjoy the
+                  stream!</p>
+
+                  <div class="input-append">
+                    <input name="v" placeholder="Search" id="master-search" size="100" type="text"><button onclick="$('form.form-horizontal').submit()" class="btn" type="button"><i class="icon-search"></i></button>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+
+        <div class="span3 offset3">
+          <h4>Items per page: <a class="items-link" href=
+          "/items?nb=10">10</a> <a class="items-link" href=
+          "/items?nb=25">25</a> <a class="items-link" href=
+          "/items?nb=50">50</a></h4>
+
+          <div class="fb-like" data-href="http://www.youhe.ro"
+          data-send="true" data-layout="button_count" data-width=
+          "450" data-show-faces="true"></div>
+          <div class="g-plusone" data-size="small" data-annotation="inline"></div>
+          <!-- Lockerz Share BEGIN -->
+
+          <div class="a2a_kit a2a_default_style">
+            <a class="a2a_dd" href=
+            "http://www.addtoany.com/share_save">Share</a>
+			<span class="a2a_divider"></span>
+            <a class="a2a_button_facebook"></a>
+			<a class="a2a_button_twitter"></a>
+			<a class="a2a_button_email"></a>
+          </div>
+          <script type="text/javascript" src="http://static.addtoany.com/menu/page.js">
+		  </script> <!-- Lockerz Share END -->
+        </div> 
+      </div><!-- row -->
+    </div> <!-- hero-unit -->
+
+    <div id="google-adds">
+      <script type="text/javascript">
+<!--
+        google_ad_client = "ca-pub-7062661054055660";
+        /* FirstTry */
+        google_ad_slot = "2533169220";
+        google_ad_width = 728;
+        google_ad_height = 90;
+        //-->
+      </script> <script type="text/javascript" src=
+      "http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+    </div>{{template "content" .}}
+    <hr>
+    <footer>
         <p>&copy; <a href="http://fericean.ro">Radu Fericean</a> 2012</p>
-      </footer>
-    </div> <!-- /container -->    
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
-	<script type="text/javascript">
-		$("a.yt").each(function(){
-		    var url = $(this).attr("href");
-		    url = url.replace("https", "http");
-		    $(this).attr("href", url);
-		})
-	</script>
-	<script type="text/javascript" src="http://webplayer.yahooapis.com/player.js"></script>
-	{{template "extrascripts" .}}
-	<script type="text/javascript">
-	$(function() {
-		$("#master-search").focus();
-		$("a.items-link").click(function(){
-			$.get($(this).attr("href"));
-			$("a.items-link").removeClass("active")
-			$(this).addClass("active");
-			return false;
-		});
-	});
-	</script>	
-	
-	<script type="text/javascript"> var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-10073547-7']); _gaq.push(['_trackPageview']); (function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })(); </script>
-  </body>
+    </footer>
+  </div><!-- /container --><script type="text/javascript" src=
+  "https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js">
+</script><script type="text/javascript" src="js/bootstrap.min.js">
+</script><script type="text/javascript">
+              $("a.yt").each(function(){
+                    var url = $(this).attr("href");
+                    url = url.replace("https", "http");
+                    $(this).attr("href", url);
+                })
+  </script><script type="text/javascript" src=
+  "http://webplayer.yahooapis.com/player.js">
+</script>{{template "extrascripts" .}} <script type=
+"text/javascript">
+      $(function() {
+                $("#master-search").focus();
+                $("a.items-link").click(function(){
+                        $.get($(this).attr("href"));
+                        $("a.items-link").removeClass("active")
+                        $(this).addClass("active");
+                        return false;
+                });
+        });
+  </script><script type="text/javascript">
+var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-10073547-7']); _gaq.push(['_trackPageview']); (function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })(); 
+  </script>
+</body>
 </html>
