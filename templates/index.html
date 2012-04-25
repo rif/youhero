@@ -1,11 +1,10 @@
-{{define "title"}}YouHero{{end}}
 {{define "content"}}
-<span class="listing_title">{{ $.title }}</span><br /><br />	
+<span class="listing_title">{{ $.title }}</span><br /><br />
 	{{range $.entries}}
 	<div class="row">
 		<div class="span3">
-			<a class="yt" title="{{ .Title }}" href="{{ .Url }}"><img class="thumb" src="{{ .Thumbnail }}" alt="{{ .Title }}"/></a><br/><br/>
-  			<span class="video_rating">{{ .Rating }} </span>
+			<a class="yt" title="{{ .Title }}" href="{{.Url}}"><img class="thumb" src="{{ .Thumb }}" alt="{{ .Title }}"/></a><br/><br/>
+  			<span class="video_rating">{{ .Rating|html }} </span>
 		</div>
 		<div class="span9">
       		<span class="video_title">{{ .Title }}</span><br />

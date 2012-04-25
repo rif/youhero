@@ -4,11 +4,11 @@ import (
 	"appengine"
 	"appengine/memcache"
 	"appengine/urlfetch"
+	"bytes"
 	"fmt"
 	"gdata"
 	"html/template"
 	"net/http"
-	"bytes"
 	"time"
 )
 
@@ -17,30 +17,30 @@ const (
 	SEARCH_FEED            = "https://gdata.youtube.com/feeds/api/videos?q=surfing"
 )
 
-func mainPage(w http.ResponseWriter, r *http.Request) {	
+func mainPage(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	front_page, err := memcache.Get(c, "front_page")
-	if err != nil {		
-		yentries := gdata.ParseFeed(RECENTLY_FEATURED_FEED, urlfetch.Client(c))
+	if err != nil {
+		yentries, err := gdata.ParseFeed(RECENTLY_FEATURED_FEED, urlfetch.Client(c))
+		if err != nil {
+			c.Infof("error getting entries: %v", err)
+		}
 		templateValues := map[string]interface{}{"entries": yentries,
-			"title": "Recently Featured Videos",
+			"title":    "Recently Featured Videos",
 			"autoplay": "false",
-		}		
+		}
 		buf := &bytes.Buffer{}
-		t, err := template.ParseFiles("templates/base.html", "templates/index.html")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-		err = t.Execute(buf, templateValues)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)			
-		}
-		oneHour,_ := time.ParseDuration("1h") 
-		item := &memcache.Item{Key: "front_page",
-			Value: buf.Bytes(),
+		t, _ := template.ParseFiles("templates/base.html", "templates/index.html")
+		t.Execute(buf, templateValues)
+		oneHour, _ := time.ParseDuration("1h")
+		front_page = &memcache.Item{
+			Key:        "front_page",
+			Value:      buf.Bytes(),
 			Expiration: oneHour,
-			}
-		memcache.Set(c, item)
+		}
+		if err := memcache.Set(c, front_page); err != nil {
+			c.Infof("error setting item: %v - %v", err)
+		}
 	}
 	fmt.Fprint(w, string(front_page.Value))
 }
@@ -83,7 +83,7 @@ func contactPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func aboutPage(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("templates/base.html", "templates/about.html")	
+	t, _ := template.ParseFiles("templates/base.html", "templates/about.html")
 	t.Execute(w, nil)
 }
 
