@@ -52,9 +52,8 @@ func mainPage(w http.ResponseWriter, r *http.Request) {
 
 func searchPage(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
-	searchTerm := r.URL.Query().Get(":query")
-	c.Infof("xxxxxxxxxxxxxxxxxxxxxxxxxxxx %s", searchTerm)
-	if searchTerm == "" {
+	searchTerm, err := url.QueryUnescape(r.URL.Query().Get(":query"))
+	if searchTerm == "" && err != nil {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
