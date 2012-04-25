@@ -51,7 +51,7 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	searchTerm := r.FormValue("v")
 	if searchTerm == "" {
-		http.Redirect(w, r, "/", http.StatusBadRequest)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 	yentries, err := gdata.ParseFeed(fmt.Sprintf(SEARCH_FEED, searchTerm), urlfetch.Client(c))
@@ -82,7 +82,7 @@ func contactPage(w http.ResponseWriter, r *http.Request) {
 		if err := mail.Send(c, msg); err != nil {
 			c.Errorf("Couldn't send email: %v", err)
 		}
-		http.Redirect(w, r, "/", http.StatusOK)
+		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 	t, _ := template.ParseFiles("templates/base.html", "templates/contact.html")
