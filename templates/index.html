@@ -3,8 +3,8 @@
 	{{range $.entries}}
 	<div class="row">
 		<div class="span3">
-			<a class="yt" title="{{ .Title }}" href="{{.Url}}"><img class="thumb" src="{{ .Thumb }}" alt="{{ .Title }}"/></a><br/><br/>
-  			<span class="video_rating">{{ .Rating|html }} </span>
+			<a class="yt" title="{{ .Title }}" href="{{.Url}}"><img class="thumb" src="{{ .Thumb }}" alt="{{ .Title  }}"/></a><br/><br/>
+  			<span class="video_rating">{{ .Rating }} </span>
 		</div>
 		<div class="span9">
       		<span class="video_title">{{ .Title }}</span><br />
@@ -21,7 +21,7 @@
 <script type="text/javascript">
 var YWPParams = {autoplay:{{$.autoplay}} };
 $(function(){	
-	$("ul.nav>li:eq(0)").addClass("active")
+	$("ul.nav>li:eq(0)").addClass("active");
 });
 </script>
 {{end}}
