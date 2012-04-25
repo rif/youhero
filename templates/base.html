@@ -35,6 +35,8 @@
 	  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=208648199247847";
 	  fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));</script>
+	<!-- google plus -->
+	<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -57,7 +59,9 @@
 
     <div class="container">      
       <div class="hero-unit">      		
-      		<a class="brand" href="/"><img src="/img/youhero.png" alt="youhero" /></a>      		
+      		<a href="/"><img src="/img/youhero.png" alt="youhero" /></a>      
+			<div class="row">	
+      		<div class="span5">		
 		    <form action="/search" method="get" id="master-form" class="form-horizontal">
 		    <fieldset>		    	
 		    	<div class="control-group">            		
@@ -70,22 +74,15 @@
           		</div>
           	</fieldset>		    	
 		    </form>
-		    <div class="row" id="items-per-page">
-		    	<div class="span3 offset9">
+			</div>
+		    	<div class="span3 offset3">
+				<h4>
 		    	Items per page:
 		    	<a class="items-link" href="/items?nb=10">10</a>
 		    	<a class="items-link" href="/items?nb=25">25</a>
 		    	<a class="items-link" href="/items?nb=50">50</a>
-		    	
-		    	</div>
-		    </div>	
-		    <div class="row">
-		         	<div class="span3 offset9">
+		    	</h4>
 		         	<div class="fb-like" data-href="http://www.youhe.ro" data-send="true" data-layout="button_count" data-width="450" data-show-faces="true"></div>		         	
-		         	</div>
-		     </div>	
-		    <div class="row">
-		        	<div class="span3 offset9">
 						<!-- Lockerz Share BEGIN -->
 						<div class="a2a_kit a2a_default_style">
 							<a class="a2a_dd" href="http://www.addtoany.com/share_save">Share</a>
@@ -97,8 +94,22 @@
 						<script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
 						<!-- Lockerz Share END -->
 		        	</div>
-		     </div>		        		    
-      </div>            
+		        </div>
+
+      </div>      
+	  <div id="google-adds">
+	<script type="text/javascript"><!--
+	google_ad_client = "ca-pub-7062661054055660";
+	/* FirstTry */
+	google_ad_slot = "2533169220";
+	google_ad_width = 728;
+	google_ad_height = 90;
+	//-->
+	</script>
+	<script type="text/javascript"
+	src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+	</script>
+	</div>      
       {{template "content" .}}                
       <hr>
       <footer>
