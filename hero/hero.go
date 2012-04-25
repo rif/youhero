@@ -14,7 +14,7 @@ import (
 
 const (
 	RECENTLY_FEATURED_FEED = "https://gdata.youtube.com/feeds/api/standardfeeds/recently_featured"
-	SEARCH_FEED            = "https://gdata.youtube.com/feeds/api/videos?q=surfing"
+	SEARCH_FEED            = "https://gdata.youtube.com/feeds/api/videos?q=%s"
 )
 
 func mainPage(w http.ResponseWriter, r *http.Request) {
@@ -46,25 +46,22 @@ func mainPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func searchPage(w http.ResponseWriter, r *http.Request) {
-	/*def get(self):    
-	  search_term = cgi.escape(self.request.get("v")).encode('UTF-8')            
-	  if not search_term:
-	      self.redirect('/')
-	      return
-
-	  client = gdata.youtube.service.YouTubeService()
-	  gdata.alt.appengine.run_on_appengine(client)
-	  query = gdata.youtube.service.YouTubeVideoQuery()
-
-	  query.vq = search_term
-	  query.max_results = self.request.cookies.get('items_per_page', '25')
-	  template_values = {
-	      'feed': client.YouTubeQuery(query),
-	      'title': "Searching for '%s'" % search_term.decode('UTF-8'),
-	      'autoplay': 'true',
-	  }
-	  template = jinja_environment.get_template('templates/index.html')
-	  self.response.out.write(template.render(template_values))*/
+	c := appengine.NewContext(r)
+	searchTerm := r.FormValue("v")
+	if searchTerm == "" {
+		http.Redirect(w, r, "/", http.StatusBadRequest)
+		return
+	}
+	yentries, err := gdata.ParseFeed(fmt.Sprintf(SEARCH_FEED, searchTerm), urlfetch.Client(c))
+	if err != nil {
+		c.Infof("error getting entries: %v", err)
+	}
+	templateValues := map[string]interface{}{"entries": yentries,
+		"title":    "Recently Featured Videos",
+		"autoplay": "false",
+	}
+	t, _ := template.ParseFiles("templates/base.html", "templates/index.html")
+	t.Execute(w, templateValues)
 }
 
 func contactPage(w http.ResponseWriter, r *http.Request) {
