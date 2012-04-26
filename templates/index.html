@@ -2,11 +2,11 @@
 <span class="listing_title">{{ $.header }}</span><br /><br />
 	{{range $.entries}}
 	<div class="row">
-		<div class="span2">
+		<div class="span3">
 			<a class="yt" title="{{ .Title }}" href="{{.Url}}"><img class="thumb" src="{{ .Thumb }}" alt="{{ .Title  }}"/></a><br/><br/>
   			<span class="video_rating">{{ .Rating }} </span>
 		</div>
-		<div class="span9">
+		<div class="span7">
       		<span class="video_title">{{ .Title }}</span><br />
       		<span class="video_description">{{ .Description }}</span><br /><br />
 			<span class="video_category"><strong>{{ .Category }}</strong></span>
