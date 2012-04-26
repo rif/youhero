@@ -77,8 +77,7 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 		query += "&" + advanced
 	}
 	//c.Infof("query: %s", query)
-	yentries, err := gdata.ParseFeed(query, urlfetch.Client(c))
-	c.Infof("Len %v", len(yentries))
+	yentries, err := gdata.ParseFeed(query, urlfetch.Client(c))	
 	if err != nil {
 		c.Errorf("error getting entries: %v", err)
 	}
