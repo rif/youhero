@@ -23,6 +23,7 @@ const (
 
 func mainPage(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
+	c.Infof("Header: %v", r.Header)
 	front_page, err := memcache.Get(c, "front_page")
 	if err != nil {
 		yentries, err := gdata.ParseFeed(RECENTLY_FEATURED_FEED, urlfetch.Client(c))
@@ -79,7 +80,7 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func contactPage(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
+	c := appengine.NewContext(r)	
 	if r.Method == "POST" {
 		name := r.FormValue("from")
 		email := r.FormValue("email")
@@ -93,8 +94,7 @@ func contactPage(w http.ResponseWriter, r *http.Request) {
 		if err := mail.Send(c, msg); err != nil {
 			c.Errorf("Couldn't send email: %v", err)
 		}
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
+		return				
 	}
 	t, _ := template.ParseFiles("templates/base.html", "templates/contact.html")
 	t.Execute(w, nil)
@@ -116,18 +116,15 @@ func itemsPerPageQuery(w http.ResponseWriter, r *http.Request) {
 
 func init() {
 	m := pat.New()
-	m.Get("/search/:query", http.HandlerFunc(searchPage))
-	m.Get("/about", http.HandlerFunc(aboutPage))
-	m.Get("/contact", http.HandlerFunc(contactPage))
-	m.Get("/items", http.HandlerFunc(itemsPerPageQuery))
+	m.Get("/search/:query", http.HandlerFunc(searchPage))	
 	m.Get("/:query", http.HandlerFunc(searchPage)) // in case of js disabled
 	m.Get("/", http.HandlerFunc(mainPage))
 	http.Handle("/", m)
 
 	//http.HandleFunc("/", mainPage)
 	//http.HandleFunc("/search", searchPage)
-	//http.HandleFunc("/about", aboutPage)
-	//http.HandleFunc("/contact", contactPage)
-	//http.HandleFunc("/items", itemsPerPageQuery)
+	http.HandleFunc("/about", aboutPage)
+	http.HandleFunc("/contact", contactPage)
+	http.HandleFunc("/items", itemsPerPageQuery)
 
 }
