@@ -3,6 +3,7 @@ package gdata
 import (
 	"errors"
 	"fmt"
+	"html"
 	"io/ioutil"
 	"net/http"
 	"regexp"
@@ -45,22 +46,22 @@ func ParseEntry(entry string) (ye *YEntry, err error) {
 		err = errors.New("Malformed entry")
 	}
 	if title := titleRe.FindStringSubmatch(entry); len(title) == 2 {
-		ye.Title = title[1]
+		ye.Title = html.UnescapeString(title[1])
 	} else {
 		err = errors.New("Malformed entry")
 	}
 	if description := descriptionRe.FindStringSubmatch(entry); len(description) == 2 {
-		ye.Description = description[1]
+		ye.Description = html.UnescapeString(description[1])
 	} else {
 		err = errors.New("Malformed entry")
 	}
 	if category := categoryRe.FindStringSubmatch(entry); len(category) == 2 {
-		ye.Category = category[1]
+		ye.Category = html.UnescapeString(category[1])
 	} else {
 		err = errors.New("Malformed entry")
 	}
 	if keywords := keywordsRe.FindStringSubmatch(entry); len(keywords) == 2 {
-		ye.Keywords = keywords[1]
+		ye.Keywords = html.UnescapeString(keywords[1])
 	} else {
 		err = errors.New("Malformed entry")
 	}
