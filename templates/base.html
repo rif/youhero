@@ -91,6 +91,9 @@
                 </div>
               </div>
             </fieldset>
+            <a id="advanced-toggle" href="#">Advanced search</a>
+            <div id="advanced-search">                        
+            </div>
           </form>
         </div>
 
@@ -163,6 +166,17 @@
                         $("a.items-link").removeClass("active")
                         $(this).addClass("active");
                         return false;
+                });
+                $("#advanced-toggle").click(function(){
+                	if ($('select#category').length == 0) {
+		            	$("#advanced-search").load("/advanced", function(){
+		            		$("#advanced-search").slideDown("fast");
+		            	});                	
+                	} else {
+                		$("#advanced-search").slideUp("fast");
+                		$("#advanced-search").text("");
+                	}
+                	return false;
                 });
         });
   </script><script type="text/javascript">

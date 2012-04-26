@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/url"
 	"pat"
+	"strings"
 	"time"
 )
 
@@ -60,13 +61,25 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
 		} 		
-	}	
+	}
+	searchElements := strings.SplitN(searchTerm, "&", 2)	
+	searchTerm = searchElements[0]
+	advanced := ""
+	if len(searchElements) > 1 {
+		advanced = searchElements[1]
+	}
+	c.Infof("Searchterm: %s - %v", searchTerm, advanced)
 	ippCookie, err := r.Cookie(COOKIE_NAME)
 	ipp := "25"
 	if err == nil {
 		ipp = ippCookie.Value
 	}
-	yentries, err := gdata.ParseFeed(fmt.Sprintf(SEARCH_FEED, url.QueryEscape(searchTerm), ipp), urlfetch.Client(c))
+	query := fmt.Sprintf(SEARCH_FEED, url.QueryEscape(searchTerm), ipp)
+	if advanced != "" {
+		query += "&" + advanced
+	}
+	c.Infof("query: %s", query)
+	yentries, err := gdata.ParseFeed(query, urlfetch.Client(c))
 	if err != nil {
 		c.Errorf("error getting entries: %v", err)
 	}
@@ -114,6 +127,11 @@ func itemsPerPageQuery(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func advancedSearchQuery(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("templates/advanced.html")
+	t.Execute(w, nil)
+}
+
 func init() {
 	m := pat.New()
 	m.Get("/search/:query", http.HandlerFunc(searchPage))	
@@ -126,5 +144,5 @@ func init() {
 	http.HandleFunc("/about", aboutPage)
 	http.HandleFunc("/contact", contactPage)
 	http.HandleFunc("/items", itemsPerPageQuery)
-
+	http.HandleFunc("/advanced", advancedSearchQuery)
 }
