@@ -14,7 +14,9 @@
   			<span class="video_keywords"><strong>Keywords:</strong> {{ .Keywords }} </span><br />
   		</div>	
     <div class="row"><div class="span4"><hr class="slight"/></div></div>
-    </div>    
+    </div>
+    {{else}}
+    <p>Sorry, No videos found!</p>   
 	{{end}}
 {{end}}
 {{define "extrascripts"}}
