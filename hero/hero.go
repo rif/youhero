@@ -18,13 +18,12 @@ import (
 
 const (
 	RECENTLY_FEATURED_FEED = "https://gdata.youtube.com/feeds/api/standardfeeds/recently_featured"
-	SEARCH_FEED            = "https://gdata.youtube.com/feeds/api/videos?q=%s&max-results=%s"
+	SEARCH_FEED            = "https://gdata.youtube.com/feeds/api/videos?q=%s&v=2&max-results=%s"
 	COOKIE_NAME            = "items_per_page"
 )
 
 func mainPage(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-	c.Infof("Header: %v", r.Header)
+	c := appengine.NewContext(r)	
 	front_page, err := memcache.Get(c, "front_page")
 	if err != nil {
 		yentries, err := gdata.ParseFeed(RECENTLY_FEATURED_FEED, urlfetch.Client(c))
@@ -67,8 +66,7 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 	advanced := ""
 	if len(searchElements) > 1 {
 		advanced = searchElements[1]
-	}
-	c.Infof("Searchterm: %s - %v", searchTerm, advanced)
+	}	
 	ippCookie, err := r.Cookie(COOKIE_NAME)
 	ipp := "25"
 	if err == nil {
@@ -78,8 +76,9 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 	if advanced != "" {
 		query += "&" + advanced
 	}
-	c.Infof("query: %s", query)
+	//c.Infof("query: %s", query)
 	yentries, err := gdata.ParseFeed(query, urlfetch.Client(c))
+	c.Infof("Len %v", len(yentries))
 	if err != nil {
 		c.Errorf("error getting entries: %v", err)
 	}
