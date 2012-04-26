@@ -76,9 +76,8 @@
       <a href="/"><img src="/img/youhero.png" alt="youhero"></a>
 
       <div class="row">
-        <div class="span5">
-          <form action="/search" method="get" id="master-form"
-          class="form-horizontal">
+        <div class="span7">
+          <form action="/search" method="get" id="master-form" class="form-inline">
             <fieldset>
               <div class="control-group">
                 <div class="controls">
@@ -86,7 +85,7 @@
                   stream!</p>
 
                   <div class="input-append">
-                    <input name="q" placeholder="Search" id="master-search" size="100" type="text"><button onclick="$('form.form-horizontal').submit()" class="btn" type="button"><i class="icon-search"></i></button>
+                    <input name="q" placeholder="Search" id="master-search" size="100" type="text"><button onclick="$('form.form-inline').submit()" class="btn" type="button"><i class="icon-search"></i></button>
                   </div>
                 </div>
               </div>
@@ -97,7 +96,7 @@
           </form>
         </div>
 
-        <div class="span3 offset3">
+        <div class="span2 offset2">
           <h4>Items per page: <a class="items-link" href=
           "/items?nb=10">10</a> <a class="items-link" href=
           "/items?nb=25">25</a> <a class="items-link" href=
