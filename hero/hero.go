@@ -50,14 +50,16 @@ func mainPage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, string(front_page.Value))
 }
 
-func searchPage(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-	//searchTerm := r.FormValue("q")
-	searchTerm, err := url.QueryUnescape(r.URL.Query().Get(":query"))
-	if searchTerm == "" && err != nil {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
-	}
+func searchPage(w http.ResponseWriter, r *http.Request) {	
+	c := appengine.NewContext(r)	
+	searchTerm, err := url.QueryUnescape(r.URL.Query().Get(":query"))	
+	if searchTerm == "" || searchTerm == "search" || err != nil { // try using get parameters (maybe js disabled)
+		searchTerm = r.FormValue("q")		
+		if searchTerm == "" { // now redirect
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		} 		
+	}	
 	ippCookie, err := r.Cookie(COOKIE_NAME)
 	ipp := "25"
 	if err == nil {
@@ -118,6 +120,7 @@ func init() {
 	m.Get("/about", http.HandlerFunc(aboutPage))
 	m.Get("/contact", http.HandlerFunc(contactPage))
 	m.Get("/items", http.HandlerFunc(itemsPerPageQuery))
+	m.Get("/:query", http.HandlerFunc(searchPage)) // in case of js disabled
 	m.Get("/", http.HandlerFunc(mainPage))
 	http.Handle("/", m)
 
