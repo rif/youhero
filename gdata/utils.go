@@ -6,17 +6,23 @@ import (
 	"strings"
 )
 
+const (
+	SIMILARITY_FACTOR = 75
+)
+
 func RemoveDuplicates(query, ipp string, c appengine.Context) (nodupes []*YEntry) {
 	nodupes, err := ParseFeed(query, urlfetch.Client(c))
 	if err != nil {
 		c.Errorf("error getting entries: %v", err)
 	}
-	for x, ye := range nodupes {
-		for y, other := range nodupes[x+1:] { // compare with the following
+	for x := 0; x < len(nodupes); x++ {
+		ye := nodupes[x]
+		for y := x + 1; y < len(nodupes); y++ { // compare with the following
+			other := nodupes[y]
 			similatity := checkSimilarity(ye.Title, other.Title)
-			if similatity > 70 {
+			c.Infof("%s <==> %s : &v", ye.Title, other.Title, similatity)
+			if similatity > SIMILARITY_FACTOR {
 				nodupes = sliceRemove(nodupes, y)
-				c.Infof("%s <==> %s : &v", ye.Title, other.Title, similatity)
 			}
 		}
 		if x > len(nodupes)-2 {
@@ -32,16 +38,16 @@ func checkSimilarity(w1, w2 string) (procentage int) {
 	words := strings.Split(w1, " ")
 	similarities := 0
 	for _, word := range words { // take word by words
-		if len(word) > 1 && strings.Contains(w2, word) {
-			similarities += 1
+		if len(word) > 1 && (word[0] != '(' || word[len(word)-1] != ')') && strings.Contains(w2, word) {
+			similarities++
 		}
 	}
 	s1 := (similarities * 100) / len(words)
 	words = strings.Split(w2, " ")
 	similarities = 0
 	for _, word := range words { // take word by words
-		if len(word) > 1 && strings.Contains(w1, word) {
-			similarities += 1
+		if len(word) > 1 && (word[0] != '(' || word[len(word)-1] != ')') && strings.Contains(w1, word) {
+			similarities++
 		}
 	}
 	s2 := (similarities * 100) / len(words)
