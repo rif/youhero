@@ -155,11 +155,6 @@
 "text/javascript">
       $(function() {
                 $("#master-search").focus();
-                $("#master-form").submit(function(){
-                  var query = $(this).serialize();
-                  window.location = "/search/" + query.substring(2);
-                  return false;
-                });
                 $("a.items-link").click(function(){
                         $.get($(this).attr("href"));
                         $("a.items-link").removeClass("active")
