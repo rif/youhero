@@ -11,19 +11,17 @@ import (
 	"html/template"
 	"net/http"
 	"net/url"
-	"pat"
-	"strings"
 	"time"
 )
 
 const (
-	RECENTLY_FEATURED_FEED = "https://gdata.youtube.com/feeds/api/standardfeeds/recently_featured"
-	SEARCH_FEED            = "https://gdata.youtube.com/feeds/api/videos?q=%s&v=2&max-results=%s"
+	RECENTLY_FEATURED_FEED = "https://gdata.youtube.com/feeds/api/standardfeeds/recently_featured?v=2"
+	SEARCH_FEED            = "https://gdata.youtube.com/feeds/api/videos?q=%s&v=2&key=AI39si6Qiy5xKw3x-ODfoN94rbfcjFaAVAxXLtFpKOtHg2iAM23H77IGdhbhxnNl9YvcjxvmSIVjdaoqw76glQChwWr97_k5Yg&max-results=%s"
 	COOKIE_NAME            = "items_per_page"
 )
 
 func mainPage(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)	
+	c := appengine.NewContext(r)
 	front_page, err := memcache.Get(c, "front_page")
 	if err != nil {
 		yentries, err := gdata.ParseFeed(RECENTLY_FEATURED_FEED, urlfetch.Client(c))
@@ -51,33 +49,34 @@ func mainPage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, string(front_page.Value))
 }
 
-func searchPage(w http.ResponseWriter, r *http.Request) {	
-	c := appengine.NewContext(r)	
-	searchTerm, err := url.QueryUnescape(r.URL.Query().Get(":query"))	
-	if searchTerm == "" || searchTerm == "search" || err != nil { // try using get parameters (maybe js disabled)
-		searchTerm = r.FormValue("q")		
-		if searchTerm == "" { // now redirect
-			http.Redirect(w, r, "/", http.StatusSeeOther)
-			return
-		} 		
+func searchPage(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	searchTerm := r.FormValue("q")
+	if searchTerm == "" {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
 	}
-	searchElements := strings.SplitN(searchTerm, "&", 2)	
-	searchTerm = searchElements[0]
-	advanced := ""
-	if len(searchElements) > 1 {
-		advanced = searchElements[1]
-	}	
 	ippCookie, err := r.Cookie(COOKIE_NAME)
 	ipp := "25"
 	if err == nil {
 		ipp = ippCookie.Value
 	}
 	query := fmt.Sprintf(SEARCH_FEED, url.QueryEscape(searchTerm), ipp)
-	if advanced != "" {
-		query += "&" + advanced
+	// advanced search options
+	cat := r.FormValue("category")
+	if cat != "" {
+		query += "&category=" + cat
 	}
-	//c.Infof("query: %s", query)
-	yentries, err := gdata.ParseFeed(query, urlfetch.Client(c))	
+	hd := r.FormValue("hd")
+	if hd != "" {
+		query += "&hd="
+	}
+	order := r.FormValue("orderby")
+	if order != "" {
+		query += "&orderby=" + order
+	}
+	c.Infof("query: %s", query)
+	yentries, err := gdata.ParseFeed(query, urlfetch.Client(c))
 	if err != nil {
 		c.Errorf("error getting entries: %v", err)
 	}
@@ -91,7 +90,7 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func contactPage(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)	
+	c := appengine.NewContext(r)
 	if r.Method == "POST" {
 		name := r.FormValue("from")
 		email := r.FormValue("email")
@@ -105,7 +104,7 @@ func contactPage(w http.ResponseWriter, r *http.Request) {
 		if err := mail.Send(c, msg); err != nil {
 			c.Errorf("Couldn't send email: %v", err)
 		}
-		return				
+		return
 	}
 	t, _ := template.ParseFiles("templates/base.html", "templates/contact.html")
 	t.Execute(w, nil)
@@ -131,14 +130,8 @@ func advancedSearchQuery(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
-	m := pat.New()
-	m.Get("/search/:query", http.HandlerFunc(searchPage))	
-	m.Get("/:query", http.HandlerFunc(searchPage)) // in case of js disabled
-	m.Get("/", http.HandlerFunc(mainPage))
-	http.Handle("/", m)
-
-	//http.HandleFunc("/", mainPage)
-	//http.HandleFunc("/search", searchPage)
+	http.HandleFunc("/", mainPage)
+	http.HandleFunc("/search", searchPage)
 	http.HandleFunc("/about", aboutPage)
 	http.HandleFunc("/contact", contactPage)
 	http.HandleFunc("/items", itemsPerPageQuery)
