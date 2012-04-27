@@ -16,7 +16,7 @@ import (
 
 const (
 	RECENTLY_FEATURED_FEED = "https://gdata.youtube.com/feeds/api/standardfeeds/recently_featured?v=2"
-	SEARCH_FEED            = "https://gdata.youtube.com/feeds/api/videos?q=%s&v=2&key=AI39si6Qiy5xKw3x-ODfoN94rbfcjFaAVAxXLtFpKOtHg2iAM23H77IGdhbhxnNl9YvcjxvmSIVjdaoqw76glQChwWr97_k5Yg&max-results=%s"
+	SEARCH_FEED            = "https://gdata.youtube.com/feeds/api/videos?q=%s&v=2&key=AI39si6Qiy5xKw3x-ODfoN94rbfcjFaAVAxXLtFpKOtHg2iAM23H77IGdhbhxnNl9YvcjxvmSIVjdaoqw76glQChwWr97_k5Yg"
 	COOKIE_NAME            = "items_per_page"
 )
 
@@ -56,12 +56,7 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-	ippCookie, err := r.Cookie(COOKIE_NAME)
-	ipp := "25"
-	if err == nil {
-		ipp = ippCookie.Value
-	}
-	query := fmt.Sprintf(SEARCH_FEED, url.QueryEscape(searchTerm), ipp)
+	query := fmt.Sprintf(SEARCH_FEED, url.QueryEscape(searchTerm))
 	// advanced search options	
 	if cat := r.FormValue("category"); cat != "" && cat != "Any" {
 		query += "&category=" + cat
@@ -72,11 +67,18 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 	if order := r.FormValue("orderby"); order != "" {
 		query += "&orderby=" + order
 	}
+	ippCookie, err := r.Cookie(COOKIE_NAME)
+	ipp := "25"
+	if err == nil {
+		ipp = ippCookie.Value
+	}
 	//c.Infof("query: %s", query)
 	var yentries []*gdata.YEntry
 	if dedup := r.FormValue("dedup"); dedup != "" {
+		query += "&max-results=50" // get max results and truncate later
 		yentries = gdata.RemoveDuplicates(query, ipp, c)
 	} else {
+		query += "&max-results=" + ipp
 		yentries, err = gdata.ParseFeed(query, urlfetch.Client(c))
 		if err != nil {
 			c.Errorf("error getting entries: %v", err)
