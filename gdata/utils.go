@@ -3,6 +3,7 @@ package gdata
 import (
 	"appengine"
 	"appengine/urlfetch"
+	"strconv"
 	"strings"
 )
 
@@ -11,7 +12,11 @@ const (
 )
 
 func RemoveDuplicates(query, ipp string, c appengine.Context) (nodupes []*YEntry) {
-	nodupes, err := ParseFeed(query, urlfetch.Client(c))
+	itemPerPage, err := strconv.ParseInt(ipp, 10, 64)
+	if err != nil {
+		itemPerPage = 25
+	}
+	nodupes, err = ParseFeed(query, urlfetch.Client(c))
 	if err != nil {
 		c.Errorf("error getting entries: %v", err)
 	}
@@ -29,7 +34,7 @@ func RemoveDuplicates(query, ipp string, c appengine.Context) (nodupes []*YEntry
 			break
 		}
 	}
-	return
+	return nodupes[:itemPerPage]
 }
 
 func checkSimilarity(w1, w2 string) (procentage int) {
