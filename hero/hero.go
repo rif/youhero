@@ -29,7 +29,7 @@ func mainPage(w http.ResponseWriter, r *http.Request) {
 			c.Errorf("error getting entries: %v", err)
 		}
 		templateValues := map[string]interface{}{"entries": yentries,
-			"title":    "YouHero",
+			"title":    "YouHero Featured Videos",
 			"header":   "Recently Featured Videos",
 			"autoplay": false,
 		}
@@ -62,23 +62,25 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 		ipp = ippCookie.Value
 	}
 	query := fmt.Sprintf(SEARCH_FEED, url.QueryEscape(searchTerm), ipp)
-	// advanced search options
-	cat := r.FormValue("category")
-	if cat != "" {
+	// advanced search options	
+	if cat := r.FormValue("category"); cat != "" && cat != "Any" {
 		query += "&category=" + cat
 	}
-	hd := r.FormValue("hd")
-	if hd != "" {
+	if hd := r.FormValue("hd"); hd != "" {
 		query += "&hd="
 	}
-	order := r.FormValue("orderby")
-	if order != "" {
+	if order := r.FormValue("orderby"); order != "" {
 		query += "&orderby=" + order
 	}
-	c.Infof("query: %s", query)
-	yentries, err := gdata.ParseFeed(query, urlfetch.Client(c))
-	if err != nil {
-		c.Errorf("error getting entries: %v", err)
+	//c.Infof("query: %s", query)
+	var yentries []*gdata.YEntry
+	if dedup := r.FormValue("dedup"); dedup != "" {
+		yentries = gdata.RemoveDuplicates(query, ipp, c)
+	} else {
+		yentries, err = gdata.ParseFeed(query, urlfetch.Client(c))
+		if err != nil {
+			c.Errorf("error getting entries: %v", err)
+		}
 	}
 	templateValues := map[string]interface{}{"entries": yentries,
 		"title":    searchTerm,

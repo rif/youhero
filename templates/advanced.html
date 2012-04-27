@@ -3,6 +3,7 @@
     	<div class="controls">
     		<label class="control-label" for="category">Category</label>
     		<select id="category" name="category">
+    			<option value="Any">Any</option>
     			<option value="Music">Music</option>
 			    <option value="Film">Film &amp; Animation</option>
 				<option value="Autos">Autos &amp; Vehicles</option>							
@@ -32,8 +33,7 @@
 				<option value="Movies_shorts">Shorts</option>
 				<option value="Shows">Shows</option>
 				<option value="Trailers">Trailers</option>
-			  </select>			  
-			  <label class="control-label" for="hd">Only HD</label><input type="checkbox" name="hd" value="true"/>
+			  </select>			  			  
 			  <label class="control-label" for="orderby">Order by</label>			  
 			  <select id="orderby" name="orderby">
     			<option value="relevance">Relevance</option>
@@ -41,6 +41,9 @@
 				<option value="viewCount">View Count</option>							
 				<option value="rating">Rating</option>				
 			  </select>
+			  <label class="control-label" for="hd">Only HD</label><input type="checkbox" name="hd" value="true"/>
+			  <label class="control-label" for="hd"> Remove duplicates (at least try to)</label><input type="checkbox" name="dedup" value="true"/>
+			  
     	</div>
     </div>
 </fieldset>

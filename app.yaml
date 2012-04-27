@@ -19,5 +19,8 @@ handlers:
 - url: /google841527a192bbf726\.html
   static_files: templates/google841527a192bbf726.html
   upload: templates/google841527a192bbf726\.html
+- url: /google4b899b9e0462f0cd\.html
+  static_files: templates/google4b899b9e0462f0cd.html
+  upload: templates/google4b899b9e0462f0cd\.html  
 - url: /.*
   script: _go_app
