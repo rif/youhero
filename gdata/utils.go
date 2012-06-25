@@ -25,7 +25,7 @@ func RemoveDuplicates(query, ipp string, c appengine.Context) (nodupes []*YEntry
 		for y := x + 1; y < len(nodupes); y++ { // compare with the following
 			other := nodupes[y]
 			similatity := checkSimilarity(ye.Title, other.Title)
-			c.Infof("%s <==> %s : &v", ye.Title, other.Title, similatity)
+			//c.Infof("%s <==> %s : &v", ye.Title, other.Title, similatity)
 			if similatity > SIMILARITY_FACTOR {
 				nodupes = sliceRemove(nodupes, y)
 			}
