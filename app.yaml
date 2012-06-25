@@ -1,5 +1,5 @@
 application: youpipes
-version: 2
+version: 3
 runtime: go
 api_version: go1
 
@@ -22,5 +22,10 @@ handlers:
 - url: /google4b899b9e0462f0cd\.html
   static_files: templates/google4b899b9e0462f0cd.html
   upload: templates/google4b899b9e0462f0cd\.html  
+- url: /BingSiteAuth\.xml
+  static_files: templates/BingSiteAuth.xml
+  upload: templates/BingSiteAuth\.xml
 - url: /.*
   script: _go_app
+  
+  
