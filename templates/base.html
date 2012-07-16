@@ -2,11 +2,8 @@
 
 <html lang="en">
 <head>
-  <meta name="generator" content=
-  "HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
   <meta charset="utf-8">
-
-  <title>{{$.title}}</title>
+  <title>{{template "title" .}}</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Youtube instant search playlist. No more YouTube playlists, just search and enjoy the stream!">
@@ -86,7 +83,7 @@
                 </div>
               </div>
             </fieldset>
-            <a id="advanced-toggle" class="btn btn-mini btn-info" href="#">Advanced search</a>
+            <a id="advanced-toggle" class="btn btn-mini btn-info" href="#">Advanced search <span class="caret"></span></a>
             <div id="advanced-search">                        
             </div>
           </form>
@@ -147,8 +144,8 @@
                 })
   </script><script type="text/javascript" src=
   "http://webplayer.yahooapis.com/player.js">
-</script>{{template "extrascripts" .}} <script type=
-"text/javascript">
+</script>{{template "extrascripts" .}}
+<script type="text/javascript">
       $(function() {
                 $("#master-search").focus();
                 $("a.items-link").click(function(){
