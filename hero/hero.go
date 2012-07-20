@@ -25,8 +25,10 @@ func mainPage(w http.ResponseWriter, r *http.Request) {
 	front_page, err := memcache.Get(c, "front_page")
 	if err != nil {
 		yentries, err := gdata.ParseFeed(RECENTLY_FEATURED_FEED, urlfetch.Client(c))
+		cache := true
 		if err != nil {
 			c.Errorf("error getting entries: %v", err)
+			cache = false
 		}
 		templateValues := map[string]interface{}{"entries": yentries,
 			"title":    "YouHero Featured Videos",
@@ -42,8 +44,10 @@ func mainPage(w http.ResponseWriter, r *http.Request) {
 			Value:      buf.Bytes(),
 			Expiration: oneHour,
 		}
-		if err := memcache.Set(c, front_page); err != nil {
-			c.Errorf("error setting item: %v - %v", err)
+		if cache {
+			if err := memcache.Set(c, front_page); err != nil {
+				c.Errorf("error setting item: %v - %v", err)
+			}
 		}
 	}
 	fmt.Fprint(w, string(front_page.Value))
