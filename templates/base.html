@@ -70,7 +70,7 @@
       <a href="/"><img src="/img/youhero.png" alt="youhero"></a>
       <div class="row">
         <div class="span6">
-          <form action="/search" method="get" id="master-form" class="form-inline">
+          <form action="/search" method="get" id="master-form" class="form-search">
             <fieldset>
               <div class="control-group">
                 <div class="controls">
@@ -78,7 +78,11 @@
                   stream!</p>
 
                   <div class="input-append">
-                    <input name="q" placeholder="Search" id="master-search" size="100" type="text"><button onclick="$('form.form-inline').submit()" class="btn" type="button"><i class="icon-search"></i></button>
+                    <input name="q" placeholder="Search"
+                    id="master-search" class="input-xlarge search-query" type="text">
+                    <button onclick="$('form.form-inline').submit()"
+                    class="btn" type="submit"><i
+                    class="icon-search"></i></button>                    
                   </div>
                 </div>
               </div>
