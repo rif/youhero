@@ -26,7 +26,7 @@ func mainPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		yentries, err := gdata.ParseFeed(RECENTLY_FEATURED_FEED, urlfetch.Client(c))
 		cache := true
-		if err != nil {
+		if err != nil || len(yentries) == 0 {
 			c.Errorf("error getting entries: %v", err)
 			cache = false
 		}
