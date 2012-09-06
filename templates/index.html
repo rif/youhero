@@ -8,9 +8,11 @@
   			<span class="video_rating">{{ .Rating }} </span>
 		</div>
 		<div class="span8">
-          <span class="video_title">{{ .Title
-          }}</span> <a href="{{.Url}}" target="_blank" class="yt noplay"><img src="img/favicon.ico"
-          alt="yt link"/></a><br />
+          <span class="video_title">{{ .Title }}</span>
+          <a href="{{.Url}}" target="_blank" class="yt noplay">
+            <img src="img/favicon.ico" alt="yt link"/>
+          </a>
+          <br />
           <span class="video_description">{{ .Description }}</span><br /><br />
           <span class="video_category"><strong>{{ .Category }}</strong></span>
           <span class="video_published"> | published on {{ .GetPublishedTime }}</span><br />
