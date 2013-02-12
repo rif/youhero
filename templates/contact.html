@@ -4,8 +4,9 @@
 <div id="contact-wrap">	
 	<form action="/contact" method="post" id="contact-form">
 		<div><label for="from">Your Name</label><input type="text" name="from" /></div>
-		<div><label for="email">Email</label><input type="email" type="text" name="email" /></div>
+		<div><label for="email">Email</label><input type="email" name="email" /></div>
 		<div><label for="content">Message</label><textarea name="content" rows="3" cols="60"></textarea></div>
+        <div><label for="vfy">Pleas type the word "cut" backwards</label><input type="text" id="vfy" name="vfy" /></div>
 		<div><input class="btn btn-primary" type="submit" value="Send Message!"></div>
 	</form>
 </div>
@@ -16,9 +17,13 @@
 $(function(){	
 	$("ul.nav>li:eq(2)").addClass("active");
 	$("#contact-form").submit(function(){
-		$.post($(this).attr("action"), $(this).serialize(), function(){
-			$("#contact-wrap").html('<div class="alert alert-success"> <a class="close" data-dismiss="alert" href="#">×</a><h4 class="alert-heading">Thank you!</h4>I will get back to you as soon as possible!</div><a class="btn btn-success" href="/">Back to front page</a>');
-		});		
+        if ($("#vfy").val() == "tuc"){
+            $.post($(this).attr("action"), $(this).serialize(), function(){
+			    $("#contact-wrap").html('<div class="alert alert-success"> <a class="close" data-dismiss="alert" href="#">×</a><h4 class="alert-heading">Thank you!</h4>I will get back to you as soon as possible!</div><a class="btn btn-success" href="/">Back to front page</a>');
+		    });		
+        } else {
+            $("#contact-wrap").prepend('<div class="alert alert-error"> <a class="close" data-dismiss="alert" href="#">×</a><h4 class="alert-heading">Error!</h4>Please pass human verification test(hint: write "tuc")!</div>');
+        }
 		return false;
 	});
 });

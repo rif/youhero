@@ -99,7 +99,7 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 
 func contactPage(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
-	if r.Method == "POST" {
+	if r.Method == "POST" && r.FormValue("vfy") == "tuc" {
 		name := r.FormValue("from")
 		email := r.FormValue("email")
 		content := r.FormValue("content")
