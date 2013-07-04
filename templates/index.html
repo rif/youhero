@@ -7,14 +7,13 @@
 		<div class="span3">
       <div class="flowplayer">
 </div>
-			<a class="yt" title="{{ $item.Title }}" href="{{$item.Url}}"><img class="thumb" src="{{ $item.Thumb }}" alt="{{ $item.Title  }}"/></a><br/><br/>
+			<a class="yt" title="{{ $item.Title }}" href="#" onclick="javascript:jwp.playlistItem({{$index}});"><img class="thumb" src="{{ $item.Thumb }}" alt="{{ $item.Title  }}"/></a><br/><br/>
   			<span class="video_rating">{{ .Rating }} </span>
 		</div>
 		<div class="span8">
-          <span class="video_title"><a href="#" onclick="javascript:jwp.playlistItem({{$index}});">{{ $item.Title }}</a></span>          
-          <a href="{{.Url}}" target="_blank" class="yt noplay">youtube link</a>
-          <br />
+          <span class="video_title"><a href="#" onclick="javascript:jwp.playlistItem({{$index}});">{{ $item.Title }}</a></span><br />
           <span class="video_description">{{ $item.Description }}</span><br /><br>
+          <a href="{{.Url}}" target="_blank" class="yt noplay">youtube link</a>
           <span class="video_category"><strong>{{ $item.Category }}</strong></span>
           <span class="video_published"> | published on {{ $item.GetPublishedTime }}</span><br>          
           <span class="video_keywords"><strong>Keywords:</strong> {{ $item.Keywords }} </span><br>
