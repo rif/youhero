@@ -27,5 +27,3 @@ handlers:
   upload: templates/BingSiteAuth\.xml
 - url: /.*
   script: _go_app
-  
-  

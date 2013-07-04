@@ -15,7 +15,8 @@ import (
 )
 
 const (
-	RECENTLY_FEATURED_FEED = "https://gdata.youtube.com/feeds/api/standardfeeds/recently_featured?v=2"
+	//RECENTLY_FEATURED_FEED = "https://gdata.youtube.com/feeds/api/standardfeeds/recently_featured"
+	RECENTLY_FEATURED_FEED = "https://gdata.youtube.com/feeds/api/standardfeeds/top_rated?time=today"
 	SEARCH_FEED            = "https://gdata.youtube.com/feeds/api/videos?q=%s&v=2&key=AI39si6Qiy5xKw3x-ODfoN94rbfcjFaAVAxXLtFpKOtHg2iAM23H77IGdhbhxnNl9YvcjxvmSIVjdaoqw76glQChwWr97_k5Yg"
 	COOKIE_NAME            = "items_per_page"
 )
@@ -23,7 +24,7 @@ const (
 func mainPage(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	front_page, err := memcache.Get(c, "front_page")
-	if err == nil {
+	if err != nil {
 		yentries, err := gdata.ParseFeed(RECENTLY_FEATURED_FEED, urlfetch.Client(c))
 		cache := true
 		if err != nil || len(yentries) == 0 {
