@@ -17,18 +17,10 @@
         padding-bottom: 40px;
       }
   </style>
-  <link href="/css/bootstrap-responsive.min.css" rel="stylesheet"
-  type="text/css">
-  <link href="/css/screen.css" media="screen, projection" rel=
-  "stylesheet" type="text/css">
-  <link href="/css/print.css" media="print" rel="stylesheet" type=
-  "text/css"><!--[if IE]>
-      <link href="/css/ie.css" media="screen, projection" rel="stylesheet" type="text/css" />
-        <![endif]--><!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+  <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
+  <link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css"> 
+  {{template "extrahead" .}}
 </head>
-
 <body>
   <div id="fb-root"></div><script type="text/javascript">
 (function(d, s, id) {
@@ -137,17 +129,16 @@
     <footer>
         <p>&copy; <a href="http://fericean.ro">Radu Fericean</a> <span id="current_year"></span></p>
     </footer>
-  </div><!-- /container --><script type="text/javascript" src=
-  "https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js">
-</script><script type="text/javascript">
+  </div><!-- /container -->
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js">
+  </script><script type="text/javascript">
               $("a.yt").each(function(){
                     var url = $(this).attr("href");
                     url = url.replace("https", "http");
                     $(this).attr("href", url);
                 })
-  </script><script type="text/javascript" src=
-  "http://webplayer.yahooapis.com/player.js">
-</script>{{template "extrascripts" .}}
+  </script>
+  {{template "extrascripts" .}}
 <script type="text/javascript">
       $(function() {
                 $("#master-search").focus();
