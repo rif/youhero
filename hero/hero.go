@@ -23,7 +23,7 @@ const (
 func mainPage(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	front_page, err := memcache.Get(c, "front_page")
-	if err != nil {
+	if err == nil {
 		yentries, err := gdata.ParseFeed(RECENTLY_FEATURED_FEED, urlfetch.Client(c))
 		cache := true
 		if err != nil || len(yentries) == 0 {
@@ -61,7 +61,7 @@ func searchPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	query := fmt.Sprintf(SEARCH_FEED, url.QueryEscape(searchTerm))
-	// advanced search options	
+	// advanced search options
 	if cat := r.FormValue("category"); cat != "" && cat != "Any" {
 		query += "&category=" + cat
 	}

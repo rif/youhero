@@ -1,9 +1,15 @@
 {{define "title"}}YouHero{{end}}
+{{define "extrahead"}}
+<script src="http://jwpsrv.com/library/PX3MDuS_EeKytRIxOQulpA.js"></script>
+{{end}}
 {{define "content"}}
+<div id='my-video'></div>
 <span class="listing_title">{{ $.header }}</span><br /><br />
 	{{range $.entries}}
 	<div class="row">
 		<div class="span3">
+      <div class="flowplayer">
+</div>
 			<a class="yt" title="{{ .Title }}" href="{{.Url}}"><img class="thumb" src="{{ .Thumb }}" alt="{{ .Title  }}"/></a><br/><br/>
   			<span class="video_rating">{{ .Rating }} </span>
 		</div>
@@ -20,13 +26,29 @@
     </div>
     {{else}}
     <p>Sorry, no videos found!</p>   
-	{{end}}
+	{{end}}  
 {{end}}
 {{define "extrascripts"}}
+
 <script type="text/javascript">
-var YWPParams = {autoplay:{{$.autoplay}} };
-$(function(){	
-	$("ul.nav>li:eq(0)").addClass("active");
+jwplayer("my-video").setup({    
+    playlist: [
+    {{range $.entries}}
+    {
+        file: '{{.Url}}',
+        image: '{{ .Thumb }}',
+        title: "{{ .Title  }}",        
+    },
+    {{end}}
+    
+    ],
+    width: '100%',
+    height: '600',
+    listbar: {
+        position: 'right',
+        size: 320
+    },
 });
+
 </script>
 {{end}}
