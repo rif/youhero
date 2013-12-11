@@ -7,11 +7,11 @@
 		<div class="span3">
       <div class="flowplayer">
 </div>
-			<a class="yt" title="{{ $item.Title }}" href="#" onclick="javascript:jwp.playlistItem({{$index}});"><img class="thumb" src="{{ $item.Thumb }}" alt="{{ $item.Title  }}"/></a><br/><br/>
+			<a class="yt" title="{{ $item.Title }}" href="#" onclick="javascript:jwplayer().playlistItem({{$index}})"><img class="thumb" src="{{ $item.Thumb }}" alt="{{ $item.Title  }}"/></a><br/><br/>
   			<span class="video_rating">{{ .Rating }} </span>
 		</div>
 		<div class="span8">
-          <span class="video_title"><a href="#" onclick="javascript:jwp.playlistItem({{$index}});">{{ $item.Title }}</a></span><br />
+          <span class="video_title"><a href="#" onclick="javascript:jwplayer().playlistItem({{$index}});">{{ $item.Title }}</a></span><br />
           <span class="video_description">{{ $item.Description }}</span><br /><br>
           <a href="{{.Url}}" target="_blank" class="yt noplay">youtube link</a>
           <span class="video_category"><strong>{{ $item.Category }}</strong></span>
@@ -27,13 +27,13 @@
 {{define "extrascripts"}}
 <script src="http://jwpsrv.com/library/PX3MDuS_EeKytRIxOQulpA.js"></script>
 <script type="text/javascript">
-jwp = jwplayer("my-video").setup({    
+jwplayer("my-video").setup({    
     playlist: [
       {{range $.entries}}
       {
-          file: '{{.Url}}',
-          image: '{{ .Thumb }}',
-          title: "{{ .Title  }}",        
+         	file: '{{.Url}}',         	
+         image: '{{ .Thumb }}',
+         title: "{{ .Title  }}",        
       },
       {{end}}    
     ],
@@ -48,7 +48,7 @@ jwp = jwplayer("my-video").setup({
     shuffle: 'false'
 });
 $(function(){ 
-  $("ul.nav>li:eq(0)").addClass("active");
+  $("ul.nav>li:eq(0)").addClass("active"); 
 });
 </script>
 {{end}}
