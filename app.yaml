@@ -1,5 +1,5 @@
-application: youpipes
-version: 4
+application: youhe-ro
+version: 1
 runtime: go
 api_version: go1
 
